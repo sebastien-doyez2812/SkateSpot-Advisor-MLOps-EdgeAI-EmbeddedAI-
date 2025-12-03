@@ -134,7 +134,7 @@ class HomeScreen extends StatelessWidget {
                   wind: data.weatherData.wind.toStringAsFixed(1),
                   trafficTime: data.travelDirection.durationText,
                   distance: data.travelDirection.distanceText,
-                  satisfaction: data.score.toStringAsFixed(1),
+                  satisfaction: (data.score * 100).toStringAsFixed(1),
                 );
               },
             ),

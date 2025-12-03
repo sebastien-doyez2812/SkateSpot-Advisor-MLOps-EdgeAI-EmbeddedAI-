@@ -21,14 +21,14 @@ class TfliteService {
 
   double predictRecommandationScore({
     required WeatherMetaData weather,
-    required DirectionsInfo direction,
     required SkateSpotMetadata metadata,
   }){
     double weatherIndex = 2.0;
     if (weather.weather.contains('rain') || 
     weather.weather.contains('snow') || 
     weather.weather.contains('drizzle') || 
-    weather.weather.contains('thunderstorm')) {
+    weather.weather.contains('thunderstorm') || 
+    weather.temp < 5.0) {
       weatherIndex =  0.0;
     }
 
@@ -49,11 +49,29 @@ class TfliteService {
       weatherIndex = 3.0;
     }
 
-    final input = [metadata.index, weatherIndex, weather.temp, direction.duration];
-    final inputTensor = [input];
-    var output = List <double>.filled(1,0).reshape([1,1]);
-    _interpreter.run(inputTensor, output);
-    final double recommandationScore = output[0][0];
+    final idInput = [
+      [metadata.index.toDouble()]
+    ];
+
+    final weatherInput = [
+      [weatherIndex]
+    ];
+
+    final output = <int, Object>{
+      0: [
+        [0.0]
+      ]
+    };
+
+    _interpreter.runForMultipleInputs(
+      [idInput, weatherInput],  // inputs (List<Object>)
+      output                    // outputs (Map<int, Object>)
+    );
+      print(weatherIndex);
+      print("output = $output");
+     final recommandationScore =
+      (output[0] as List<List<double>>)[0][0];
+
     return recommandationScore;
   }
 

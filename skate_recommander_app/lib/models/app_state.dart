@@ -209,11 +209,10 @@ class AppState extends ChangeNotifier{
           newScore = _tfliteService.predictRecommandationScore(
             weather: newWeather,
             metadata: spot.skateSpotData,
-            direction: spot.travelDirection,
           );
 
-          if (newScore > 10) {
-            newScore = 10;
+          if (newScore > 1) {
+            newScore = 1;
           }
           else if (newScore < 0) {
             newScore = 0;
