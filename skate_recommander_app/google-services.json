@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "24492591028",
+    "project_id": "skate-spot-adviser",
+    "storage_bucket": "skate-spot-adviser.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:24492591028:android:0baf02839fadf3342654e1",
+        "android_client_info": {
+          "package_name": "com.skaterecommander.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcDfwh0qIB6r56skjlQ_mO_MhJnYzSOHA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

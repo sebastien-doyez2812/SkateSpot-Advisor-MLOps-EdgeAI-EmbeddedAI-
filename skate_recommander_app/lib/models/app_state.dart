@@ -4,18 +4,21 @@ import 'package:skate_recommander_app/services/geolocation_servcice.dart';
 import 'package:skate_recommander_app/services/tflite_service.dart';
 import 'package:skate_recommander_app/services/direction_service.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:http/http.dart' as http;
 
 class SkateSpotMetadata {
   final String name;
   final double index;
   final double latitude;
   final double longitude;
-  
+  final String imageUrl;
+
   SkateSpotMetadata({
     required this.name,
     required this.index,
     required this.latitude,
     required this.longitude,
+    required this.imageUrl,
   });
 }
 
@@ -84,21 +87,21 @@ class AppState extends ChangeNotifier{
   int get recommendedSpotCount => _spots.where((s) => s.isRecommended).length;
 
   final List<Map<String, dynamic>> _spotMetadataRaw = [
-    { 'index': 0, 'spot': 'Ahuntsic', 'latitude': 45.5549710, 'longitude': -73.6655090 },
-    { 'index': 1, 'spot': 'VanHorne', 'latitude': 45.5280967, 'longitude': -73.6032037 },
-    { 'index': 2, 'spot': 'Verdun', 'latitude': 45.4651901, 'longitude': -73.5612674 },
-    { 'index': 3, 'spot': 'Lasalle', 'latitude': 45.4279386, 'longitude': -73.6020374 },
-    { 'index': 4, 'spot': 'Préfontaine', 'latitude': 45.5420670, 'longitude': -73.5540844 },
-    { 'index': 5, 'spot': 'Boucherville', 'latitude': 45.6045212, 'longitude': -73.4455350 },
-    { 'index': 6, 'spot': 'Taz', 'latitude': 45.5607671, 'longitude': -73.6350361 },
-    { 'index': 7, 'spot': 'Spin', 'latitude': 45.4442666, 'longitude': -73.4335593 },
-    { 'index': 8, 'spot': 'Saint Jérome', 'latitude': 45.783333, 'longitude': -74.00000 },
-    { 'index': 9, 'spot': 'Saint Sauveur', 'latitude': 45.8984171, 'longitude': -74.1579093 },
-    { 'index': 10, 'spot': 'Assomption', 'latitude': 45.8509996, 'longitude': -73.4196890 },
-    { 'index': 11, 'spot': 'Benny', 'latitude': 45.4661667, 'longitude': -73.6329167 },
-    { 'index': 12, 'spot': 'Dorval', 'latitude': 45.4418142, 'longitude': -73.7554385 }, 
-    { 'index': 13, 'spot': 'Magog', 'latitude': 45.2661561, 'longitude': -72.1582782 },
-    { 'index': 14, 'spot': 'Berthierville', 'latitude': 46.0653026, 'longitude': -73.1858064 },
+    { 'index': 0, 'spot': 'Ahuntsic', 'latitude': 45.5549710, 'longitude': -73.6655090, 'url': 'https://raw.githubusercontent.com/sebastien-doyez2812/SkateSpot-Advisor-MLOps-EdgeAI-EmbeddedAI-/main/skate_recommander_app/images/ahuntsic.jpg' },
+    { 'index': 1, 'spot': 'VanHorne', 'latitude': 45.5280967, 'longitude': -73.6032037, 'url': 'https://raw.githubusercontent.com/sebastien-doyez2812/SkateSpot-Advisor-MLOps-EdgeAI-EmbeddedAI-/main/skate_recommander_app/images/vanhorne.jpg' },
+    { 'index': 2, 'spot': 'Verdun', 'latitude': 45.4651901, 'longitude': -73.5612674, 'url': 'https://raw.githubusercontent.com/sebastien-doyez2812/SkateSpot-Advisor-MLOps-EdgeAI-EmbeddedAI-/main/skate_recommander_app/images/verdun.jpg' },
+    { 'index': 3, 'spot': 'Lasalle', 'latitude': 45.4279386, 'longitude': -73.6020374, 'url': 'https://raw.githubusercontent.com/sebastien-doyez2812/SkateSpot-Advisor-MLOps-EdgeAI-EmbeddedAI-/main/skate_recommander_app/images/lasalle.jpg' },
+    { 'index': 4, 'spot': 'Préfontaine', 'latitude': 45.5420670, 'longitude': -73.5540844, 'url': 'https://raw.githubusercontent.com/sebastien-doyez2812/SkateSpot-Advisor-MLOps-EdgeAI-EmbeddedAI-/main/skate_recommander_app/images/prefontaine.jpg' },
+    { 'index': 5, 'spot': 'Boucherville', 'latitude': 45.6045212, 'longitude': -73.4455350, 'url': '' },
+    { 'index': 6, 'spot': 'Taz', 'latitude': 45.5607671, 'longitude': -73.6350361, 'url': '' },
+    { 'index': 7, 'spot': 'Spin', 'latitude': 45.4442666, 'longitude': -73.4335593, 'url': '' },
+    { 'index': 8, 'spot': 'Saint Jérome', 'latitude': 45.783333, 'longitude': -74.00000, 'url': '' },
+    { 'index': 9, 'spot': 'Saint Sauveur', 'latitude': 45.8984171, 'longitude': -74.1579093, 'url': '' },
+    { 'index': 10, 'spot': 'Assomption', 'latitude': 45.8509996, 'longitude': -73.4196890, 'url': ''},
+    { 'index': 11, 'spot': 'Benny', 'latitude': 45.4661667, 'longitude': -73.6329167, 'url': '' },
+    { 'index': 12, 'spot': 'Dorval', 'latitude': 45.4418142, 'longitude': -73.7554385, 'url': '' }, 
+    { 'index': 13, 'spot': 'Magog', 'latitude': 45.2661561, 'longitude': -72.1582782, 'url': '' },
+    { 'index': 14, 'spot': 'Berthierville', 'latitude': 46.0653026, 'longitude': -73.1858064, 'url': 'https://raw.githubusercontent.com/sebastien-doyez2812/SkateSpot-Advisor-MLOps-EdgeAI-EmbeddedAI-/main/skate_recommander_app/images/berthierville.jpg' },
   ];
 
   AppState({
@@ -116,7 +119,8 @@ class AppState extends ChangeNotifier{
         name: data['spot'] as String,
         index: data['index'].toDouble(),
         latitude: data['latitude'].toDouble(),
-        longitude: data['longitude'].toDouble()
+        longitude: data['longitude'].toDouble(), 
+        imageUrl: data['url'] as String
       );
 
       final defaultSnapShot = WeatherMetaData(
@@ -180,6 +184,26 @@ class AppState extends ChangeNotifier{
     }
     _spots = updatedSpots;
   }
+
+  Future<void> sendFeedback({
+    required String spotName,
+    required String liked, 
+    required String modelScore, 
+    required String weather, 
+    required String distance, 
+    required String travelTime
+  }) async {
+
+    final url = Uri.parse("https://script.google.com/macros/s/AKfycbyhIwSnZu1xmGkCzGDolwzgdLHvFqDvudfcc9wko4VAvJqqXgcvJbJJy_aSyFTwwhyEAw/exec"
+    "?spot_name=$spotName&liked=$liked&model_score=$modelScore&weather=$weather&distance=$distance&travel_time=$travelTime"); 
+    try{
+      final response = await http.get(url);
+      print("[+] Feedback sent: ${response.body}");
+    } catch(e){
+      print("[-] Failed to send feedback: $e");
+    }
+  }
+
 
   Future <void> fetchAndProcessData() async {
     if (_isLoading) return;

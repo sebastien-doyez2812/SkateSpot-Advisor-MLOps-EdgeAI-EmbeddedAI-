@@ -1,5 +1,7 @@
 // lib/widgets/weather_spot_card.dart
 import 'package:flutter/material.dart';
+import 'package:skate_recommander_app/models/app_state.dart';
+import 'package:provider/provider.dart';
 
 class WeatherSpotCard extends StatelessWidget {
   final String spotName;
@@ -66,7 +68,32 @@ class WeatherSpotCard extends StatelessWidget {
               
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [ _buildDataColumn('Traffic.', trafficTime),
               _buildDataColumn('dist', distance),],),
-              _buildDataColumn('Satisfaction:', "$satisfaction %")
+              _buildDataColumn('Satisfaction:', "$satisfaction %"),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(onPressed: () {
+                    Provider.of<AppState>(context,listen:false).sendFeedback(spotName: spotName,
+                    liked: "1", 
+                    modelScore: satisfaction, 
+                    weather: weather, 
+                    distance: distance, 
+                    travelTime: trafficTime
+                    );
+                  }, icon: Icon(Icons.thumb_up, color: Colors.green,)),
+
+                  IconButton(onPressed: () {
+                    Provider.of<AppState>(context,listen:false).sendFeedback(spotName: spotName,
+                    liked: "-1", 
+                    modelScore: satisfaction, 
+                    weather: weather, 
+                    distance: distance, 
+                    travelTime: trafficTime
+                    );
+                  }, icon: Icon(Icons.thumb_down, color: Colors.red,)),
+                  
+                ],
+              )
             ],
           ),
         ],

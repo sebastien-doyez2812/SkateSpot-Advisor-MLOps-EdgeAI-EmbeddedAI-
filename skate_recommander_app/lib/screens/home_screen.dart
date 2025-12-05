@@ -83,11 +83,15 @@ class HomeScreen extends StatelessWidget {
                         width: 80.0,
                         height: 80.0,
                         point: LatLng(data.latitude, data.longitude),
-                        child: const Icon( 
+                        child: GestureDetector(
+                          onTap: () {
+                            _showSpotImage(context, data);
+                          }, child: const Icon( 
                           Icons.location_pin,
                           color: Colors.red,
                           size: 40.0,
                         ),
+                        ) 
                       );
                     }).toList(),
                   ),
@@ -143,4 +147,51 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+
+  void _showSpotImage(BuildContext context, SkateModel data) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                data.name,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Image.network(
+                  data.skateSpotData.imageUrl,
+                  height: 200,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stack) {
+                    return const Text(
+                      "No image available.",
+                      style: TextStyle(color: Colors.grey),
+                    );
+                  },
+                ),
+              ),
+
+              const SizedBox(height: 20),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
 }
