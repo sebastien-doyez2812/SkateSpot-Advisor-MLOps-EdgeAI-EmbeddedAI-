@@ -62,14 +62,14 @@ class WeatherSpotCard extends StatelessWidget {
             children: [
               _buildDataColumn("Weather", weather),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [_buildDataColumn('Météo T', "$temp °C"),
-              _buildDataColumn('Ressenti', "$feelsLike °C", isTemp: true),],),
+              _buildDataColumn('Ressenti', "$feelsLike", isTemp: true),],),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [ _buildDataColumn('Humid.', "$humidity %"),
               _buildDataColumn('Vent', "$wind km/h"),],),
               
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [ _buildDataColumn('Traffic.', trafficTime),
               _buildDataColumn('dist', distance),],),
               _buildDataColumn('Satisfaction:', "$satisfaction %"),
-              Column(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(onPressed: () {
@@ -78,7 +78,10 @@ class WeatherSpotCard extends StatelessWidget {
                     modelScore: satisfaction, 
                     weather: weather, 
                     distance: distance, 
-                    travelTime: trafficTime
+                    travelTime: trafficTime, 
+                    temp: temp,
+                    humidity: humidity,
+                    wind: wind
                     );
                   }, icon: Icon(Icons.thumb_up, color: Colors.green,)),
 
@@ -88,7 +91,10 @@ class WeatherSpotCard extends StatelessWidget {
                     modelScore: satisfaction, 
                     weather: weather, 
                     distance: distance, 
-                    travelTime: trafficTime
+                    travelTime: trafficTime, 
+                    temp: temp,
+                    humidity: humidity,
+                    wind: wind
                     );
                   }, icon: Icon(Icons.thumb_down, color: Colors.red,)),
                   

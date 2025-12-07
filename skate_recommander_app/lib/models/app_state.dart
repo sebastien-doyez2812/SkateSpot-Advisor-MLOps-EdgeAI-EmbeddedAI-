@@ -191,17 +191,37 @@ class AppState extends ChangeNotifier{
     required String modelScore, 
     required String weather, 
     required String distance, 
-    required String travelTime
+    required String travelTime,
+    required String temp, 
+    required String humidity,
+    required String wind
   }) async {
+    final cleanName = spotName.replaceFirst("Spot ", "");
+    final match = _spotMetadataRaw.firstWhere((spot) => spot['spot'].toString().toLowerCase() == cleanName.toLowerCase(), orElse: () => {});
 
-    final url = Uri.parse("https://script.google.com/macros/s/AKfycbyhIwSnZu1xmGkCzGDolwzgdLHvFqDvudfcc9wko4VAvJqqXgcvJbJJy_aSyFTwwhyEAw/exec"
-    "?spot_name=$spotName&liked=$liked&model_score=$modelScore&weather=$weather&distance=$distance&travel_time=$travelTime"); 
+
+    if (match.isEmpty){
+      print("[-] Spot name not found for feedback: $spotName");
+      return;
+    }
+    final base = "https://script.google.com/macros/s/AKfycbwgGlNDVMUZ7GaoQTugoqKSdRfJnCjqtUiKzrc5j4DQm5hgdgg3kLhS7KqHeP5yWzwKhQ/exec";
+    final url = Uri.parse(base);
     try{
-      final response = await http.get(url);
-      print("[+] Feedback sent: ${response.body}");
+      final response = await http.post(url, body: { 
+        'spot_name': match["index"].toString(),
+        'liked': liked,
+        'model_score': modelScore,
+        'weather': weather,
+        'distance': distance,
+        'travel_time': travelTime,
+        'temp': temp,
+        'humidity': humidity,
+        'wind': wind
+      });
+      print("[+] Feedback sent: ${response.body}, \n skatespot $spotName, liked: $liked, modelScore: $modelScore, weather: $weather, distance: $distance, travelTime: $travelTime");
     } catch(e){
       print("[-] Failed to send feedback: $e");
-    }
+    }    
   }
 
 

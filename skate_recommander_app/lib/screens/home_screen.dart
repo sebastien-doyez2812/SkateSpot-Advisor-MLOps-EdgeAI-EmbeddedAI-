@@ -63,7 +63,7 @@ class HomeScreen extends StatelessWidget {
       body: Column(
         children: <Widget>[
           Expanded(
-            flex: 2,
+            flex: 3,
             child: Container(
               color: Colors.grey[200],
               child: FlutterMap(
@@ -104,24 +104,11 @@ class HomeScreen extends StatelessWidget {
           const Divider(height: 1),
           Padding(
             padding: const EdgeInsets.all(8.0),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.end,
-          //     children: [
-          //       const Text('4', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          //       const SizedBox(width: 8),
-          //       TextButton.icon(
-          //         onPressed: () {
-          //         },
-          //         icon: const Icon(Icons.share),
-          //         label: const Text('Partager'),
-          //       ),
-          //     ],
-          //   ),
           ),
 
           // Spots list:
           Expanded(
-            flex: 1,
+            flex: 2,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: appState.spots.length,
